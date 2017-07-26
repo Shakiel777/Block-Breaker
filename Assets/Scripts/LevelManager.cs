@@ -3,24 +3,13 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
-    //private int activeSceneBuildIndex;
-
-    //void Start()
-    //{
-    //    Initialise();
-    //}
-
-    //private void Initialise()
-    //{
-    //    Scene activeScene = SceneManager.GetActiveScene();
-
-    //    activeSceneBuildIndex = activeScene.buildIndex;
-    //}
 
     public void LoadLevel(string name)
     {
 		Debug.Log ("Level load requested for: "+name);
-		Application.LoadLevel(name);
+        Brick.breakableCount = 0;
+        SceneManager.LoadScene(name);
+		// Application.LoadLevel(name);
 	}
 	public void QuitLevel()
     {
@@ -29,11 +18,20 @@ public class LevelManager : MonoBehaviour {
 
     public void LoadNextLevel()
     {
+        Brick.breakableCount = 0;
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
         print("Load next level request");
         // SceneManager.LoadSceneAsync(++activeSceneBuildIndex);
         // Application.LoadLevel(Application.loadedLevel + 1);
         // SceneManager.LoadScene("Win");
 
+    }
+    public void BrickDestroyed()
+    {
+        // if last brick destroyed
+        if (Brick.breakableCount <= 0)
+        {
+            LoadNextLevel();
+        }
     }
 }
